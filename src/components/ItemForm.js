@@ -1,33 +1,52 @@
-import React, { useState } from "react";
+// ItemForm.js
+import { useState } from "react";
 
-function ItemForm() {
+function ItemForm({ onAddItem }) {
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("Produce");
+  const [category, setCategory] = useState("Dessert");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    fetch("http://localhost:4000/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        category: category,
+        isInCart: false,
+      }),
+    })
+      .then((r) => r.json())
+      .then((newItem) => {
+        onAddItem(newItem); // Add the new item to the state in ShoppingList
+        setName(""); // Reset form fields
+        setCategory("Dessert"); // Reset category
+      });
+  }
 
   return (
-    <form className="NewItem">
-      <label>
-        Name:
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name">Name:</label>
+      <input
+        id="name"
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
 
-      <label>
-        Category:
-        <select
-          name="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="Produce">Produce</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Dessert">Dessert</option>
-        </select>
-      </label>
+      <label htmlFor="category">Category:</label>
+      <select
+        id="category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      >
+        <option value="Dessert">Dessert</option>
+        <option value="Dairy">Dairy</option>
+        <option value="Fruit">Fruit</option>
+      </select>
 
       <button type="submit">Add to List</button>
     </form>
