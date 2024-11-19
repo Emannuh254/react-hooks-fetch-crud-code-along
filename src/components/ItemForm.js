@@ -1,4 +1,3 @@
-// ItemForm.js
 import { useState } from "react";
 
 function ItemForm({ onAddItem }) {
@@ -21,9 +20,9 @@ function ItemForm({ onAddItem }) {
     })
       .then((r) => r.json())
       .then((newItem) => {
-        onAddItem(newItem); // Add the new item to the state in ShoppingList
-        setName(""); // Reset form fields
-        setCategory("Dessert"); // Reset category
+        onAddItem(newItem);
+        setName("");
+        setCategory("Dessert");
       });
   }
 
